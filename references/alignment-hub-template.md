@@ -48,6 +48,7 @@ capability_matrix:
   available: [string]
   missing: [string]
   adapters_selected: [string]
+  adapters_dynamic: [string]
 
 repos:
   - name: string
@@ -79,6 +80,17 @@ status:
 tracking:
   source_of_truth: local_hub|github|tracker
   external_refs: [string]
+
+adapters:
+  - id: string
+    source: builtin|adhoc
+    capabilities: [string]
+    validation_status: valid|invalid|pending
+    provenance:
+      created_by: user|agent
+      created_at: iso-8601
+      environment_assumptions: [string]
+      tool_access_required: [string]
 
 decision_log:
   - at: iso-8601

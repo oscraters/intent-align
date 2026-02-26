@@ -42,6 +42,7 @@ capability_matrix:
   available: [string]
   missing: [string]
   adapters_selected: [string]
+  adapters_dynamic: [string]
 
 strictness_policy:
   default_mode: hard_gate|soft_gate|advisory
@@ -100,5 +101,17 @@ When proceeding under ambiguity, always:
 
 ## Capability Binding Rules
 - Match required capabilities to available adapters.
-- If a capability is missing, switch to degraded mode and notify the user.
+- If a capability is missing, create an ad-hoc adapter from `references/adapters/adapter-template.md`.
+- Validate ad-hoc adapter required fields before use.
+- Register validated adapter in `capability_matrix.adapters_selected`.
+- If capability remains unresolved, switch to degraded mode and notify the user.
 - Never fabricate unavailable tool access.
+
+## Ad-Hoc Adapter Rules
+- Create adapters only for current task/repo/workflow scope.
+- Reuse existing validated adapters when capability and environment match.
+- Include provenance metadata for all ad-hoc adapters:
+  - `created_by`
+  - `created_at`
+  - `environment_assumptions`
+  - `tool_access_required`

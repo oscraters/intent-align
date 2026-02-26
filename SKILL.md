@@ -47,8 +47,14 @@ Use only adapters needed for the task:
 - [references/adapters/github.md](references/adapters/github.md)
 - [references/adapters/local-repo.md](references/adapters/local-repo.md)
 - [references/adapters/tracker-generic.md](references/adapters/tracker-generic.md)
+- [references/adapters/adapter-template.md](references/adapters/adapter-template.md)
 
-If no adapter can satisfy a required capability, ask user for direction and continue in degraded mode.
+If no adapter can satisfy a required capability:
+1. Generate an ad-hoc adapter spec from `adapter-template.md`.
+2. Add provenance metadata (`created_by`, `created_at`, `environment_assumptions`, `tool_access_required`).
+3. Validate required fields before use.
+4. Register the new adapter in `capability_matrix.adapters_selected`.
+5. Continue in degraded mode only if validation fails or auth/capability remains unavailable.
 
 ## Anti-Bloat Rules
 - Keep core contract tool-agnostic.
@@ -56,6 +62,7 @@ If no adapter can satisfy a required capability, ask user for direction and cont
 - Add a new adapter only for a proven capability gap.
 - Keep schemas single-source; do not duplicate fields across files.
 - Tie each new feature to one concrete failure mode and one test scenario.
+- Generate ad-hoc adapters only for current task scope; do not pre-generate broad catalogs.
 
 ## Edge Cases
 - Multi-repo: maintain one hub with per-repo adapter bindings and dependency graph.
