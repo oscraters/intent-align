@@ -1,44 +1,60 @@
 ---
 name: intent-align
-description: Traycer-inspired orchestrator for aligned agent swarms: intent → MVP spec/phases/Mermaid → spawn subagents (parallel/multi-repo/non-git) → check-ins/steer → verify/refactor. Adaptive: git/gh/canvas/kanban/SaaS tracking, 4 autonomy levels (strict/YOLO). Use when: (1) Coding/PRs/issues/monorepos/teams, (2) Prototypes/files/APIs, (3) Phased tasks needing vision lock/anti-drift, (4) Flexible workflows (user prefs via memory_search).
+description: "Intent-alignment orchestration for OpenClaw agent teams across diverse host environments. Use when work must stay anchored to user goals while allowing flexible execution: (1) coding with repos/PRs/issues, (2) multi-phase delivery with checkpoints, (3) multi-agent or multi-repo coordination, (4) evolving requirements needing structured re-alignment and user clarification loops."
 ---
 
-# Intent-Align: Traycer-Style Swarm Orchestrator
+# Intent-Align v2 Core
 
-Anti-drift for OpenClaw: Keeps subagents locked to user vision w/ flexibility.
+Keep execution aligned to user intent while preserving agent autonomy.
 
 ## Quick Start
-User: \"Align swarm: Build MVP todo app w/ API.\"  
-1. Gen spec/phases (canvas Mermaid).  
-2. Setup hub (refs/alignment-hub-template.md).  
-3. Spawn/check/verify.
+1. Read [references/core-contract.md](references/core-contract.md).
+2. Create alignment hub from [references/alignment-hub-template.md](references/alignment-hub-template.md).
+3. Run Intent Quality Gate before planning.
+4. Select adapters from [references/adapters/](references/adapters).
+5. Execute phases with realignment and verification gates.
 
-## Core Workflow (Imperative)
-1. **Intent → Spec**: LLM → phases/files/Mermaid (canvas present assets/mermaid-spec-template.md). Write `plans/${project}-spec.md`. memory_search \"user vision/prefs\".
-2. **Hub Setup**: read refs/alignment-hub-template.md → edit {spec, autonomy:2, tracking:gh}. write temp/${project}/alignment-hub.md.
-3. **Autonomy Levels** (config in hub; periodic message check):  
-   - 1 Strict: Check every phase (block spawn).  
-   - 2 Balanced: Phase-end check-in.  
-   - 3 Aggressive: Auto-verify + minor refactor.  
-   - 4 Wild: Log-only.  
-   Prompt spawns: \"Autonomy ${level}: ${rules}. No drift from spec.\"
-4. **Swarm Spawn**: sessions_spawn per phase/repo (parallel loop, thread=true, label=team-phase). Pass: spec + hub + memory_search.
-5. **Loop (heartbeat/subagents list)**:  
-   - Poll status.  
-   - Cross-sync: sessions_send peers via hub.deps.  
-   - Check-in: message \"Phase X: Aligned? Tweaks? Level?\" → steer/kill/update hub.  
-   - Verify: coding-agent diffs/tests; gh-issues PRs; canvas eval.
-6. **Close**: Aggregate hub → MEMORY.md update; cleanup temp/.
+## Workflow Contract
+1. Build `intent_snapshot` and run `intent_lint` (see core contract).
+2. Block execution on unresolved critical ambiguities.
+3. Generate phase plan and Mermaid diagram with explicit dependencies and gates.
+4. Bind available adapters through `capability_matrix`.
+5. Execute phase-by-phase.
+6. Before phase start, run Pre-Execution Clarification Gate.
+7. On each phase end, run verification gates and update drift evidence.
+8. If intent or constraints change, apply `intent_delta` and re-plan only impacted phases.
+9. Close with final alignment report and open ambiguity list (if any).
 
-## Adaptive Tracking (User Prefs)
-- memory_search \"track in [gh/obsidian/trello]\" → gh-issues/browser/obsidian.  
-- Canvas Mermaid kanban: phases|agents|status.  
-- SaaS: browser act (login/create).
+## Autonomy Levels
+- `1 Strict`: Require user confirmation before each phase start.
+- `2 Balanced`: Require user confirmation at phase end or any critical drift.
+- `3 Aggressive`: Auto-continue on low drift; require confirmation on major deltas.
+- `4 Exploratory`: Continue with log-only check-ins unless risk or ambiguity threshold is exceeded.
+
+Override rule: unresolved critical ambiguity always blocks regardless of autonomy level.
+
+## Required References
+- [references/core-contract.md](references/core-contract.md)
+- [references/alignment-hub-template.md](references/alignment-hub-template.md)
+- [references/realignment-protocol.md](references/realignment-protocol.md)
+- [references/verification-gates.md](references/verification-gates.md)
+
+## Adapter Selection
+Use only adapters needed for the task:
+- [references/adapters/github.md](references/adapters/github.md)
+- [references/adapters/local-repo.md](references/adapters/local-repo.md)
+- [references/adapters/tracker-generic.md](references/adapters/tracker-generic.md)
+
+If no adapter can satisfy a required capability, ask user for direction and continue in degraded mode.
+
+## Anti-Bloat Rules
+- Keep core contract tool-agnostic.
+- Do not add tracker- or host-specific logic to core files.
+- Add a new adapter only for a proven capability gap.
+- Keep schemas single-source; do not duplicate fields across files.
+- Tie each new feature to one concrete failure mode and one test scenario.
 
 ## Edge Cases
-**Multi-Repo Parallel**: repos=[fe,be]; mkdir temp/swarm-hub/. Parallel sessions_spawn workdir=temp/${repo}. Cross-hub deps sync (sessions_send).  
-**Non-Git Proto**: Skip git; file ops + canvas mocks.  
-**Teams**: Labels=frontend-team; gh assignee.  
-
-Read refs/alignment-hub-template.md for schema. assets/ for templates.  
-Publish via clawhub when refined.
+- Multi-repo: maintain one hub with per-repo adapter bindings and dependency graph.
+- Non-git prototype: use local artifacts and explicit acceptance criteria checkpoints.
+- Team swarm: assign owner per phase and keep decision log in hub.
