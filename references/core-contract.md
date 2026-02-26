@@ -62,6 +62,7 @@ Run before planning.
 5. Evaluate ambiguity action using severity + strictness + risk class.
 6. Classify ambiguities as critical, major, or minor.
 7. If ambiguity remains, ask targeted questions before proceeding or continuing.
+8. Validate capability IDs using `references/capability-taxonomy.md`.
 
 ## Ambiguity Classes
 - Missing acceptance criteria.
@@ -74,6 +75,7 @@ Run before planning.
 - Ask 1-3 high-impact questions.
 - Ask questions in decision-ready form (pick A vs B, define threshold, set priority).
 - Propose a default when confidence is high enough; request explicit override.
+- If `ambiguity_score > 0.2`, ask at least 1 clarification question before next phase.
 
 ## Pre-Execution Clarification Gate
 Run before each phase starts.
@@ -81,8 +83,9 @@ Run before each phase starts.
 1. Re-run lint on latest intent state.
 2. Resolve effective strictness for this phase/task scope.
 3. Check new blockers (including auth/capability blockers).
-4. If blocked, request clarification or authorization path.
-5. Resume only when phase gate is `ready`.
+4. Confirm `strictness_policy` and `effective_strictness` are populated for this phase.
+5. If blocked, request clarification or authorization path.
+6. Resume only when phase gate is `ready`.
 
 ## Ambiguity Action Matrix
 Use this matrix to set `blocked_by_clarification` and phase readiness.
@@ -106,6 +109,19 @@ When proceeding under ambiguity, always:
 - Register validated adapter in `capability_matrix.adapters_selected`.
 - If capability remains unresolved, switch to degraded mode and notify the user.
 - Never fabricate unavailable tool access.
+- Use core capability IDs from `references/capability-taxonomy.md`.
+- Use custom capability IDs only with namespace `x.<agent_or_team>.<capability>`.
+- Ensure all `adapters_selected` entries exist in hub `adapters` registry.
+
+## Output Conformance Rules
+Validate hub output before phase close and project close:
+- Render full hub snapshot; do not use placeholders such as `(unchanged)`.
+- Keep list-structured fields as explicit lists (`repos`, `phases`, `adapters`, logs).
+- Use fenced code blocks for Mermaid (` ```mermaid ... ``` `).
+
+On conformance failure:
+- In `hard_gate` mode: block current phase until fixed.
+- In `soft_gate` or `advisory`: allow `partial` with remediation notes and next check-in.
 
 ## Ad-Hoc Adapter Rules
 - Create adapters only for current task/repo/workflow scope.

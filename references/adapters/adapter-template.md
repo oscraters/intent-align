@@ -47,3 +47,4 @@ adapter_spec:
 - `inputs` and `outputs.result_schema` are defined.
 - At least one failure mode and one fallback exist.
 - `provenance` fields are complete.
+- Adapter is registered in hub `adapters` and referenced by `capability_matrix.adapters_selected`.

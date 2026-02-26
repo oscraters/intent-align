@@ -77,6 +77,11 @@ status:
   next_user_checkin: iso-8601
   ambiguity_mode_notice: string
 
+conformance:
+  status: pass|partial|fail
+  issues: [string]
+  remediation: [string]
+
 tracking:
   source_of_truth: local_hub|github|tracker
   external_refs: [string]

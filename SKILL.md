@@ -23,7 +23,7 @@ Keep execution aligned to user intent while preserving agent autonomy.
 6. Bind available adapters through `capability_matrix`.
 7. Execute phase-by-phase.
 8. Before phase start, run Pre-Execution Clarification Gate.
-9. On each phase end, run verification gates and update drift evidence.
+9. On each phase end, run verification gates (including output conformance) and update drift evidence.
 10. If intent or constraints change, apply `intent_delta` and re-plan only impacted phases.
 11. Close with final alignment report and open ambiguity list (if any).
 
@@ -41,6 +41,7 @@ Strictness rule: strictness mode controls whether ambiguities block or proceed w
 - [references/alignment-hub-template.md](references/alignment-hub-template.md)
 - [references/realignment-protocol.md](references/realignment-protocol.md)
 - [references/verification-gates.md](references/verification-gates.md)
+- [references/capability-taxonomy.md](references/capability-taxonomy.md)
 
 ## Adapter Selection
 Use only adapters needed for the task:
@@ -63,6 +64,7 @@ If no adapter can satisfy a required capability:
 - Keep schemas single-source; do not duplicate fields across files.
 - Tie each new feature to one concrete failure mode and one test scenario.
 - Generate ad-hoc adapters only for current task scope; do not pre-generate broad catalogs.
+- Use canonical capability IDs first; extend only when needed via namespaced custom IDs.
 
 ## Edge Cases
 - Multi-repo: maintain one hub with per-repo adapter bindings and dependency graph.

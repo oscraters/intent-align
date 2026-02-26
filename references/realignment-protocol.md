@@ -35,6 +35,12 @@ If the user does not answer and autonomy permits progress:
 - Aggressive: major drift only.
 - Exploratory: periodic summaries; block only on critical ambiguity/risk.
 
+## Proactive Improvement Behavior
+- At phase end, propose at least one optimization and one risk reduction with evidence.
+- If external research suggests improved outcomes, create an `intent_delta` proposal before applying changes.
+- In autonomy `3` or `4`, add optional "Propose Changes" phase unless user opts out.
+- If `ambiguity_score > 0.2`, ask at least 1 decision-ready question before the next phase.
+
 ## Upfront Strictness Prompt
 At kickoff, ask:
 - preferred default mode (`hard_gate`, `soft_gate`, `advisory`)
