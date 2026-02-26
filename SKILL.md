@@ -16,14 +16,16 @@ Keep execution aligned to user intent while preserving agent autonomy.
 
 ## Workflow Contract
 1. Build `intent_snapshot` and run `intent_lint` (see core contract).
-2. Block execution on unresolved critical ambiguities.
-3. Generate phase plan and Mermaid diagram with explicit dependencies and gates.
-4. Bind available adapters through `capability_matrix`.
-5. Execute phase-by-phase.
-6. Before phase start, run Pre-Execution Clarification Gate.
-7. On each phase end, run verification gates and update drift evidence.
-8. If intent or constraints change, apply `intent_delta` and re-plan only impacted phases.
-9. Close with final alignment report and open ambiguity list (if any).
+2. Ask for strictness mode and scope overrides (project/repo/workflow/task).
+3. Resolve effective strictness by precedence: `task > workflow > repo > project > default`.
+4. Evaluate ambiguity action using severity + strictness + risk class.
+5. Generate phase plan and Mermaid diagram with explicit dependencies and gates.
+6. Bind available adapters through `capability_matrix`.
+7. Execute phase-by-phase.
+8. Before phase start, run Pre-Execution Clarification Gate.
+9. On each phase end, run verification gates and update drift evidence.
+10. If intent or constraints change, apply `intent_delta` and re-plan only impacted phases.
+11. Close with final alignment report and open ambiguity list (if any).
 
 ## Autonomy Levels
 - `1 Strict`: Require user confirmation before each phase start.
@@ -31,7 +33,8 @@ Keep execution aligned to user intent while preserving agent autonomy.
 - `3 Aggressive`: Auto-continue on low drift; require confirmation on major deltas.
 - `4 Exploratory`: Continue with log-only check-ins unless risk or ambiguity threshold is exceeded.
 
-Override rule: unresolved critical ambiguity always blocks regardless of autonomy level.
+Override rule: high-risk ambiguity is never advisory-only; enforce at least `soft_gate`.
+Strictness rule: strictness mode controls whether ambiguities block or proceed with guardrails.
 
 ## Required References
 - [references/core-contract.md](references/core-contract.md)

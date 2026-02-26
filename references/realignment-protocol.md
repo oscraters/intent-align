@@ -11,11 +11,12 @@ Use this protocol whenever intent may have changed or drift is detected.
 ## Procedure
 1. Capture change candidate and classify it.
 2. Build `intent_delta`.
-3. Identify impacted phases/repos only.
-4. Re-plan only impacted phases.
-5. Preserve completed unaffected phases unless user requests rollback.
-6. Ask for confirmation if change affects acceptance criteria or hard constraints.
-7. Update hub logs and next check-in time.
+3. Confirm or update strictness mode for affected scope (project/repo/workflow/task).
+4. Identify impacted phases/repos only.
+5. Re-plan only impacted phases.
+6. Preserve completed unaffected phases unless user requests rollback.
+7. Ask for confirmation if change affects acceptance criteria or hard constraints.
+8. Update hub logs and next check-in time.
 
 ## Clarification Loop
 When ambiguity remains:
@@ -33,3 +34,11 @@ If the user does not answer and autonomy permits progress:
 - Balanced: phase end and on major drift.
 - Aggressive: major drift only.
 - Exploratory: periodic summaries; block only on critical ambiguity/risk.
+
+## Upfront Strictness Prompt
+At kickoff, ask:
+- preferred default mode (`hard_gate`, `soft_gate`, `advisory`)
+- any repo-level override
+- any workflow/task override
+
+Apply precedence: `task > workflow > repo > project > default`.

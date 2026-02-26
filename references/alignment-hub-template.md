@@ -30,6 +30,19 @@ autonomy:
   level: 2
   override_on_critical_ambiguity: true
 
+strictness_policy:
+  default_mode: soft_gate
+  project_mode: soft_gate
+  repo_overrides:
+    - repo: string
+      mode: hard_gate|soft_gate|advisory
+  workflow_overrides:
+    - workflow: string
+      mode: hard_gate|soft_gate|advisory
+  task_overrides:
+    - task: string
+      mode: hard_gate|soft_gate|advisory
+
 capability_matrix:
   required: [string]
   available: [string]
@@ -45,8 +58,10 @@ repos:
 phases:
   - id: P1
     name: string
+    workflow: string
     deps: [P0]
     owner: string
+    effective_strictness: hard_gate|soft_gate|advisory
     status: blocked|ready|in_progress|verify|done
     acceptance_checks: [string]
     verification_evidence: [string]
@@ -59,6 +74,7 @@ status:
   risk_level: low|medium|high
   last_sync: iso-8601
   next_user_checkin: iso-8601
+  ambiguity_mode_notice: string
 
 tracking:
   source_of_truth: local_hub|github|tracker
